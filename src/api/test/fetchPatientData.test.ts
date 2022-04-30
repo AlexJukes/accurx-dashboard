@@ -1,27 +1,18 @@
 import axios from "axios";
+import { stubPatientData } from "../../test/stubs/patientData.stub";
 import { fetchPatientData } from "../fetchPatientData";
 
 jest.mock("axios");
 describe("fetchPatientData", () => {
-  const mockPatientData = [
-    {
-      firstName: "Gelato",
-      lastName: "Al Cioccolato",
-      vaccineDate: 1637877061,
-      vaccineType: "Pfizer",
-      nhsNumber: "4584318425",
-      id: "1",
-    },
-  ];
   const mockUrl = "some-url";
 
   afterEach(jest.resetAllMocks);
 
   it("correctly fetches patient information from the given endpoint", async () => {
-    (axios.get as jest.Mock).mockResolvedValueOnce({ data: mockPatientData });
+    (axios.get as jest.Mock).mockResolvedValueOnce({ data: stubPatientData });
 
     const res = await fetchPatientData(mockUrl);
     expect(axios.get).toHaveBeenCalledWith(mockUrl);
-    expect(res).toEqual(mockPatientData);
+    expect(res).toEqual(stubPatientData);
   });
 });
