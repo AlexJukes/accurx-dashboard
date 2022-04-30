@@ -16,4 +16,4 @@ const fetchPatientData = async (url: string): Promise<Patient[]> => {
 };
 
 export { fetchPatientData };
-export type { Patient };
+export type { Patient, Vaccine };

@@ -15,10 +15,10 @@ describe("fetchPatientData", () => {
   ];
   const mockUrl = "some-url";
 
-  it("correctly fetches patient information from the given endpoint", async () => {
-    // arrange
+  afterEach(jest.resetAllMocks);
 
-    (axios.get as jest.Mock).mockResolvedValueOnce(mockPatientData);
+  it("correctly fetches patient information from the given endpoint", async () => {
+    (axios.get as jest.Mock).mockResolvedValueOnce({ data: mockPatientData });
 
     const res = await fetchPatientData(mockUrl);
     expect(axios.get).toHaveBeenCalledWith(mockUrl);
