@@ -1,1 +1,0 @@
-export { PatientInformation } from "./PatientInformation";

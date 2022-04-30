@@ -1,12 +1,12 @@
 import { screen, render } from "@testing-library/react";
-import { PatientInformation } from "..";
+import { PatientDashboard } from "..";
 import { fetchPatientData } from "../../../api/fetchPatientData";
 import { PatientDataTable } from "../../PatientDataTable";
 
 jest.mock("../../../api/fetchPatientData");
 jest.mock("../../PatientDataTable");
 
-describe("PatientInformation", () => {
+describe("PatientDashboard", () => {
   const mockPatientData = [
     {
       firstName: "Gelato",
@@ -25,12 +25,12 @@ describe("PatientInformation", () => {
   });
 
   it("renders", async () => {
-    render(<PatientInformation />);
+    render(<PatientDashboard />);
     expect(await screen.findByText("Patient Information")).toBeInTheDocument();
   });
 
   it("shows a loading message until data has been fetched", async () => {
-    render(<PatientInformation />);
+    render(<PatientDashboard />);
     expect(await screen.findByText("Loading...")).toBeInTheDocument();
     expect(
       screen.queryByTestId("mock-patient-data-table")
@@ -38,12 +38,16 @@ describe("PatientInformation", () => {
   });
 
   it("renders the PatientDataTable with correct info once data has been fetched", async () => {
-    (fetchPatientData as jest.Mock).mockResolvedValueOnce({
-      data: mockPatientData,
-    });
-    render(<PatientInformation />);
+    (fetchPatientData as jest.Mock).mockResolvedValueOnce(mockPatientData);
+    render(<PatientDashboard />);
     expect(
       await screen.findByTestId("mock-patient-data-table")
     ).toBeInTheDocument();
+    expect(PatientDataTable).toHaveBeenCalledWith(
+      {
+        patientData: mockPatientData,
+      },
+      {}
+    );
   });
 });

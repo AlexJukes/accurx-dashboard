@@ -15,7 +15,7 @@ describe("PatientDataTable", () => {
       },
     ];
 
-    render(<PatientDataTable patients={mockPatientData} />);
+    render(<PatientDataTable patientData={mockPatientData} />);
     screen.getByText("Gelato");
     screen.getByText("Al Cioccolato");
     screen.getByText("Pfizer");

@@ -1,10 +1,10 @@
 import { Patient } from "../../api/fetchPatientData";
 
 interface PatientDataTableProps {
-  patients: Patient[];
+  patientData: Patient[];
 }
 
-const PatientDataTable: React.FC<PatientDataTableProps> = ({ patients }) => {
+const PatientDataTable: React.FC<PatientDataTableProps> = ({ patientData }) => {
   return (
     <table>
       <thead>
@@ -16,8 +16,8 @@ const PatientDataTable: React.FC<PatientDataTableProps> = ({ patients }) => {
         </tr>
       </thead>
       <tbody>
-        {patients.length
-          ? patients.map(
+        {patientData.length
+          ? patientData.map(
               ({ id, firstName, lastName, vaccineType, nhsNumber }) => (
                 <tr key={id}>
                   <td>{lastName}</td>

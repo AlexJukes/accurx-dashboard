@@ -5,7 +5,7 @@ import { PatientDataTable } from "../PatientDataTable";
 const PATIENT_DATA_ENDPOINT =
   "https://61ba219448df2f0017e5a929.mockapi.io/api/patients";
 
-const PatientInformation: React.FC = () => {
+const PatientDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [patientData, setPatientData] = React.useState<Patient[]>([]);
 
@@ -23,10 +23,10 @@ const PatientInformation: React.FC = () => {
       {isLoading ? (
         <div>Loading...</div>
       ) : (
-        <PatientDataTable patients={patientData} />
+        <PatientDataTable patientData={patientData} />
       )}
     </>
   );
 };
 
-export { PatientInformation };
+export { PatientDashboard };
