@@ -50,4 +50,14 @@ describe("PatientDashboard", () => {
       {}
     );
   });
+
+  it("renders an error message if there was a problem fetching the data", async () => {
+    (fetchPatientData as jest.Mock).mockRejectedValueOnce("Uh oh@");
+    render(<PatientDashboard />);
+    expect(
+      await screen.findByText(
+        "Looks like something went wrong loading the data"
+      )
+    ).toBeInTheDocument();
+  });
 });

@@ -7,21 +7,33 @@ const PATIENT_DATA_ENDPOINT =
 
 const PatientDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
+  const [isError, setIsError] = React.useState<boolean>(false);
+
   const [patientData, setPatientData] = React.useState<Patient[]>([]);
 
   React.useEffect(() => {
     const getPatientData = async () => {
-      const fetchedPatientData = await fetchPatientData(PATIENT_DATA_ENDPOINT);
-      setPatientData(fetchedPatientData);
-      setIsLoading(false);
+      try {
+        const fetchedPatientData = await fetchPatientData(
+          PATIENT_DATA_ENDPOINT
+        );
+        setPatientData(fetchedPatientData);
+        setIsLoading(false);
+      } catch (error) {
+        setIsError(true);
+        setIsLoading(false);
+      }
     };
     getPatientData();
   }, []);
+
   return (
     <>
       <h1>Patient Information</h1>
       {isLoading ? (
         <div>Loading...</div>
+      ) : isError ? (
+        <div>Looks like something went wrong loading the data</div>
       ) : (
         <PatientDataTable patientData={patientData} />
       )}
