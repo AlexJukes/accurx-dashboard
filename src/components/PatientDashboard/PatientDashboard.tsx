@@ -1,5 +1,6 @@
 import React from "react";
 import { fetchPatientData, Patient } from "../../api/fetchPatientData";
+import { sortDataByName } from "../../logic/sortDataByName";
 import { PatientDataTable } from "../PatientDataTable";
 
 const PATIENT_DATA_ENDPOINT =
@@ -8,6 +9,7 @@ const PATIENT_DATA_ENDPOINT =
 const PatientDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [isError, setIsError] = React.useState<boolean>(false);
+  const [isSortByAsc, setIsSortByAsc] = React.useState<boolean>(true);
 
   const [patientData, setPatientData] = React.useState<Patient[]>([]);
 
@@ -17,7 +19,8 @@ const PatientDashboard: React.FC = () => {
         const fetchedPatientData = await fetchPatientData(
           PATIENT_DATA_ENDPOINT
         );
-        setPatientData(fetchedPatientData);
+        const sortedPatientData = sortDataByName(fetchedPatientData, "asc"); // sort by asc by default
+        setPatientData(sortedPatientData);
         setIsLoading(false);
       } catch (error) {
         setIsError(true);
@@ -27,6 +30,18 @@ const PatientDashboard: React.FC = () => {
     getPatientData();
   }, []);
 
+  const handleSortByNameClick = () => {
+    const toggledSort = !isSortByAsc;
+
+    const sortedPatientData = sortDataByName(
+      patientData,
+      toggledSort ? "asc" : "desc"
+    );
+
+    setPatientData(sortedPatientData);
+    setIsSortByAsc(toggledSort);
+  };
+
   return (
     <>
       <h1>Patient Information</h1>
@@ -35,7 +50,12 @@ const PatientDashboard: React.FC = () => {
       ) : isError ? (
         <div>Looks like something went wrong loading the data</div>
       ) : (
-        <PatientDataTable patientData={patientData} />
+        <>
+          <button onClick={handleSortByNameClick}>
+            Sort by name {isSortByAsc ? "⬆️" : "⬇️"}
+          </button>
+          <PatientDataTable patientData={patientData} />
+        </>
       )}
     </>
   );
