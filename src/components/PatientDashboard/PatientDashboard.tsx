@@ -10,6 +10,7 @@ const PatientDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [isError, setIsError] = React.useState<boolean>(false);
   const [isSortByAsc, setIsSortByAsc] = React.useState<boolean>(true);
+  const [searchInput, setSearchInput] = React.useState<string>("");
 
   const [patientData, setPatientData] = React.useState<Patient[]>([]);
 
@@ -42,9 +43,15 @@ const PatientDashboard: React.FC = () => {
     setIsSortByAsc(toggledSort);
   };
 
+  const handleInput = ({
+    currentTarget: { value },
+  }: React.FormEvent<HTMLInputElement>) => setSearchInput(value);
+
   return (
     <>
       <h1>Patient Information</h1>
+      <h2>Search</h2>
+      <input type="text" value={searchInput} onChange={handleInput} />
       {isLoading ? (
         <div>Loading...</div>
       ) : isError ? (
