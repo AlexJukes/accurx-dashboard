@@ -47,15 +47,24 @@ const PatientDashboard: React.FC = () => {
     currentTarget: { value },
   }: React.FormEvent<HTMLInputElement>) => setSearchInput(value);
 
+  const isSearching = searchInput.length === 1;
+
   return (
     <>
       <h1>Patient Information</h1>
-      <h2>Search</h2>
-      <input type="text" value={searchInput} onChange={handleInput} />
+      <label htmlFor="search">Search</label>
+      <input
+        type="text"
+        id="search"
+        value={searchInput}
+        onChange={handleInput}
+      />
       {isLoading ? (
         <div>Loading...</div>
       ) : isError ? (
         <div>Looks like something went wrong loading the data</div>
+      ) : isSearching ? (
+        <div>Please type more than one character to search</div>
       ) : (
         <>
           <button onClick={handleSortByNameClick}>

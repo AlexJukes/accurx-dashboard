@@ -1,4 +1,4 @@
-import { screen, render } from "@testing-library/react";
+import { screen, render, fireEvent } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import { PatientDashboard } from "..";
 import { fetchPatientData } from "../../../api/fetchPatientData";
@@ -107,5 +107,16 @@ describe("PatientDashboard", () => {
     expect(sortDataByName).toHaveBeenCalledTimes(3);
 
     expect(sortDataByName).toHaveBeenNthCalledWith(3, stubPatientData, "asc");
+  });
+
+  it("shows a message saying you need to type more than one character to do a search", async () => {
+    render(<PatientDashboard />);
+
+    const input = await screen.findByLabelText(/Search/);
+
+    fireEvent.change(input, { target: { value: "a" } });
+    expect(
+      screen.getByText("Please type more than one character to search")
+    ).toBeInTheDocument();
   });
 });
