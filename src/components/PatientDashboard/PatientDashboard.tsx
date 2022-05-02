@@ -1,10 +1,10 @@
 import React from "react";
 import { fetchPatientData, Patient } from "../../api/fetchPatientData";
+import { searchPatientData } from "../../api/searchPatientData";
 import { sortDataByName } from "../../logic/sortDataByName";
 import { PatientDataTable } from "../PatientDataTable";
 
-const PATIENT_DATA_ENDPOINT =
-  "https://61ba219448df2f0017e5a929.mockapi.io/api/patients";
+const DEFAULT_SORT_BY = "asc";
 
 const PatientDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
@@ -17,10 +17,11 @@ const PatientDashboard: React.FC = () => {
   React.useEffect(() => {
     const getPatientData = async () => {
       try {
-        const fetchedPatientData = await fetchPatientData(
-          PATIENT_DATA_ENDPOINT
+        const fetchedPatientData = await fetchPatientData();
+        const sortedPatientData = sortDataByName(
+          fetchedPatientData,
+          DEFAULT_SORT_BY
         );
-        const sortedPatientData = sortDataByName(fetchedPatientData, "asc"); // sort by asc by default
         setPatientData(sortedPatientData);
         setIsLoading(false);
       } catch (error) {
@@ -31,9 +32,9 @@ const PatientDashboard: React.FC = () => {
     getPatientData();
   }, []);
 
-  const handleSortByNameClick = () => {
-    const toggledSort = !isSortByAsc;
+  const toggledSort = !isSortByAsc;
 
+  const handleSortByNameClick = () => {
     const sortedPatientData = sortDataByName(
       patientData,
       toggledSort ? "asc" : "desc"
@@ -43,11 +44,30 @@ const PatientDashboard: React.FC = () => {
     setIsSortByAsc(toggledSort);
   };
 
-  const handleInput = ({
-    currentTarget: { value },
-  }: React.FormEvent<HTMLInputElement>) => setSearchInput(value);
-
   const isSearching = searchInput.length === 1;
+  const invalidSearchValue = isSearching || !Boolean(searchInput);
+
+  const handleInput = async ({
+    currentTarget: { value },
+  }: React.FormEvent<HTMLInputElement>) => {
+    try {
+      setSearchInput(value);
+      if (invalidSearchValue) return;
+      setIsLoading(true);
+      console.log("value", value);
+
+      const searchedPatientData = await searchPatientData(value);
+      const sortedPatientData = sortDataByName(
+        searchedPatientData,
+        toggledSort ? "asc" : "desc"
+      );
+      setPatientData(sortedPatientData);
+      setIsLoading(false);
+    } catch (error) {
+      setIsError(true);
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>

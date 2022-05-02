@@ -1,4 +1,5 @@
 import axios from "axios";
+import { PATIENT_DATA_ENDPOINT } from "./constants";
 
 type Vaccine = "Pfizer" | "AstraZeneca";
 
@@ -11,8 +12,8 @@ interface Patient {
   id: string;
 }
 
-const fetchPatientData = async (url: string): Promise<Patient[]> => {
-  return (await axios.get(url)).data;
+const fetchPatientData = async (): Promise<Patient[]> => {
+  return (await axios.get(PATIENT_DATA_ENDPOINT)).data;
 };
 
 export { fetchPatientData };

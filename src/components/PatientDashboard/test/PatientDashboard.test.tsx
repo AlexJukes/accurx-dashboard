@@ -6,7 +6,6 @@ import { sortDataByName } from "../../../logic/sortDataByName";
 import {
   stubPatientData,
   stubPatientDataSortedByAsc,
-  stubPatientDataSortedByDesc,
 } from "../../../test/stubs/patientData.stub";
 import { PatientDataTable } from "../../PatientDataTable";
 
