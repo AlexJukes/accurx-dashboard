@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { fetchPatientData, Patient } from "../../api/fetchPatientData";
 import { searchPatientData } from "../../api/searchPatientData";
 import { sortDataByName } from "../../logic/sortDataByName";
@@ -14,7 +14,7 @@ const PatientDashboard: React.FC = () => {
 
   const [patientData, setPatientData] = React.useState<Patient[]>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const getPatientData = async () => {
       try {
         const fetchedPatientData = await fetchPatientData();
@@ -49,22 +49,31 @@ const PatientDashboard: React.FC = () => {
   const handleInput = async ({
     currentTarget: { value },
   }: React.FormEvent<HTMLInputElement>) => {
-    try {
-      setSearchInput(value);
-      if (value.length < 2) return;
-      setIsLoading(true);
-      const searchedPatientData = await searchPatientData(value);
-      const sortedPatientData = sortDataByName(
-        searchedPatientData,
-        toggledSort ? "asc" : "desc"
-      );
-      setPatientData(sortedPatientData);
-      setIsLoading(false);
-    } catch (error: any) {
-      setError(error);
-      setIsLoading(false);
-    }
+    setSearchInput(value);
   };
+
+  useEffect(() => {
+    const searchUsers = async () => {
+      try {
+        setError(null);
+
+        if (searchInput.length < 2) return;
+        setIsLoading(true);
+        const searchedPatientData = await searchPatientData(searchInput);
+        const sortedPatientData = sortDataByName(
+          searchedPatientData,
+          toggledSort ? "asc" : "desc"
+        );
+        setPatientData(sortedPatientData);
+        setIsLoading(false);
+      } catch (error: any) {
+        setError(error);
+        setIsLoading(false);
+      }
+    };
+
+    searchUsers();
+  }, [searchInput, toggledSort]);
 
   return (
     <>
