@@ -1,6 +1,6 @@
 import axios from "axios";
+import { Patient } from "../types";
 import { PATIENT_DATA_ENDPOINT } from "./constants";
-import { Patient } from "./fetchPatientData";
 
 export const searchPatientData = async (
   searchQuery: string

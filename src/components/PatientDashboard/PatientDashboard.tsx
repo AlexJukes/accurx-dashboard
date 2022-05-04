@@ -1,4 +1,5 @@
 import React from "react";
+import "./PatientDashboard.css";
 import { sortDataByName } from "../../logic/sortDataByName";
 import { Patient } from "../../types";
 import { FullListPatientView } from "./components/FullListPatientView";
@@ -33,16 +34,20 @@ const PatientDashboard: React.FC = () => {
   return (
     <>
       <h1>Patient Information</h1>
-      <label htmlFor="search">Search</label>
-      <input
-        type="text"
-        id="search"
-        value={searchInput}
-        onChange={handleInput}
-      />
-      <button onClick={handleSortByNameClick}>
-        Sort by name {isSortByAsc ? "A-Z" : "Z-A"} {isSortByAsc ? "⬆️" : "⬇️"}
-      </button>
+      <div className="search-bar">
+        <label htmlFor="search">Search by last name </label>
+        <input
+          type="text"
+          id="search"
+          value={searchInput}
+          onChange={handleInput}
+        />
+      </div>
+      <div className="toggle-button">
+        <button onClick={handleSortByNameClick}>
+          Sort by name {isSortByAsc ? "A-Z" : "Z-A"} {isSortByAsc ? "⬆️" : "⬇️"}
+        </button>
+      </div>
       {Boolean(searchInput) ? (
         <SearchListPatientView sortBy={sortBy} searchQuery={searchInput} />
       ) : (

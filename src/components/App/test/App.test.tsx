@@ -3,6 +3,6 @@ import { App } from "../App";
 
 test("renders learn react link", () => {
   render(<App />);
-  const linkElement = screen.getByText(/Accurx Dashboard/i);
+  const linkElement = screen.getByText(/accurX Dashboard/i);
   expect(linkElement).toBeInTheDocument();
 });

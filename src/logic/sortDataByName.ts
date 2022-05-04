@@ -1,4 +1,4 @@
-import { Patient } from "../api/fetchPatientData";
+import { Patient } from "../types";
 
 const sortDataByName = (data: Patient[], sortBy: "asc" | "desc"): Patient[] => {
   return data

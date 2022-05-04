@@ -4,7 +4,7 @@ import "./App.css";
 function App() {
   return (
     <div className="App">
-      <header className="App-header">Accurx Dashboard</header>
+      <header className="App-header">accurX Dashboard</header>
       <main>
         <PatientDashboard />
       </main>
