@@ -4,9 +4,9 @@ import { PatientDashboard } from "..";
 import { fetchPatientData } from "../../../api/fetchPatientData";
 import { sortDataByName } from "../../../logic/sortDataByName";
 import { stubPatientData } from "../../../test/stubs/patientData.stub";
-import { PatientDataTable } from "../../PatientDataTable";
-import { FullListPatientView } from "../../FullListPatientView";
-import { SearchListPatientView } from "../../SearchListPatientView";
+import { PatientDataTable } from "../components/PatientDataTable";
+import { FullListPatientView } from "../components/FullListPatientView";
+import { SearchListPatientView } from "../components/SearchListPatientView";
 
 jest.mock("../../../api/fetchPatientData");
 jest.mock("../../PatientDataTable");
@@ -48,12 +48,15 @@ describe("PatientDashboard", () => {
   it("toggles sorting the data by ascending or descending when clicking 'Sort by name' button", async () => {
     render(<PatientDashboard />);
 
-    const button = await screen.findByText(/Sort by name/);
+    const button = await screen.findByText(/Sort by name A-Z/);
 
     act(() => {
       button.click();
     });
+
     expect(FullListPatientView).toHaveBeenCalledWith({ sortBy: "desc" }, {});
+
+    expect(await screen.findByText(/Sort by name Z-A/)).toBeInTheDocument();
   });
 
   it("shows the SearchListPatientView when search initiated", async () => {

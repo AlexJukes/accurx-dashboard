@@ -1,0 +1,15 @@
+.patient-data-table {
+  margin: 30px 50px;
+}
+
+table {
+  width: 80%;
+}
+
+tr {
+  text-align: left;
+}
+
+td {
+  text-align: left;
+}

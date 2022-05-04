@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { PatientDataTable } from "..";
-import { stubPatientData } from "../../../test/stubs/patientData.stub";
+import { stubPatientData } from "../../../../../test/stubs/patientData.stub";
 
 describe("PatientDataTable", () => {
   it("renders given patient data correctly", () => {

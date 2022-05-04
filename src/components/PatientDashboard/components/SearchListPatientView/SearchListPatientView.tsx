@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { Patient } from "../../api/fetchPatientData";
-import { searchPatientData } from "../../api/searchPatientData";
-import { sortDataByName } from "../../logic/sortDataByName";
+import { searchPatientData } from "../../../../api/searchPatientData";
+import { sortDataByName } from "../../../../logic/sortDataByName";
+import { Patient } from "../../../../types";
 import { PatientDataTable } from "../PatientDataTable";
 
 interface SearchListPatientViewProps {

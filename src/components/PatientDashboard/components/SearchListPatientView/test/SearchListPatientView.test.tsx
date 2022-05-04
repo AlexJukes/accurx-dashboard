@@ -1,11 +1,11 @@
 import { screen, render, waitFor } from "@testing-library/react";
 import { SearchListPatientView } from "..";
-import { searchPatientData } from "../../../api/searchPatientData";
-import { sortDataByName } from "../../../logic/sortDataByName";
+import { searchPatientData } from "../../../../../api/searchPatientData";
+import { sortDataByName } from "../../../../../logic/sortDataByName";
 import {
   stubPatientData,
   stubPatientDataSortedByAsc,
-} from "../../../test/stubs/patientData.stub";
+} from "../../../../../test/stubs/patientData.stub";
 
 import { PatientDataTable } from "../../PatientDataTable";
 

@@ -1,8 +1,8 @@
 import React from "react";
-import { Patient } from "../../api/fetchPatientData";
 import { sortDataByName } from "../../logic/sortDataByName";
-import { FullListPatientView } from "../FullListPatientView";
-import { SearchListPatientView } from "../SearchListPatientView";
+import { Patient } from "../../types";
+import { FullListPatientView } from "./components/FullListPatientView";
+import { SearchListPatientView } from "./components/SearchListPatientView";
 
 const PatientDashboard: React.FC = () => {
   const [isSortByAsc, setIsSortByAsc] = React.useState<boolean>(true);
@@ -41,7 +41,7 @@ const PatientDashboard: React.FC = () => {
         onChange={handleInput}
       />
       <button onClick={handleSortByNameClick}>
-        Sort by name {isSortByAsc ? "⬆️" : "⬇️"}
+        Sort by name {isSortByAsc ? "A-Z" : "Z-A"} {isSortByAsc ? "⬆️" : "⬇️"}
       </button>
       {Boolean(searchInput) ? (
         <SearchListPatientView sortBy={sortBy} searchQuery={searchInput} />
