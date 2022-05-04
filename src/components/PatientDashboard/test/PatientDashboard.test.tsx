@@ -7,6 +7,7 @@ import {
   stubPatientData,
   stubPatientDataSortedByAsc,
 } from "../../../test/stubs/patientData.stub";
+
 import { PatientDataTable } from "../../PatientDataTable";
 
 jest.mock("../../../api/fetchPatientData");
@@ -117,5 +118,14 @@ describe("PatientDashboard", () => {
     expect(
       screen.getByText("Please type more than one character to search")
     ).toBeInTheDocument();
+  });
+
+  it("displays a loading screen when search initiated (>= 2 characters)", async () => {
+    render(<PatientDashboard />);
+
+    const input = await screen.findByLabelText(/Search/);
+
+    fireEvent.change(input, { target: { value: "ab" } });
+    expect(screen.getByText("Loading...")).toBeInTheDocument();
   });
 });

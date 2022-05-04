@@ -1,5 +1,5 @@
+import { PatientDashboard } from "../PatientDashboard";
 import "./App.css";
-import { PatientDashboard } from "./components/PatientDashboard";
 
 function App() {
   return (
@@ -12,4 +12,4 @@ function App() {
   );
 }
 
-export default App;
+export { App };

@@ -45,17 +45,14 @@ const PatientDashboard: React.FC = () => {
   };
 
   const isSearching = searchInput.length === 1;
-  const invalidSearchValue = isSearching || !Boolean(searchInput);
 
   const handleInput = async ({
     currentTarget: { value },
   }: React.FormEvent<HTMLInputElement>) => {
     try {
       setSearchInput(value);
-      if (invalidSearchValue) return;
+      if (value.length < 2) return;
       setIsLoading(true);
-      console.log("value", value);
-
       const searchedPatientData = await searchPatientData(value);
       const sortedPatientData = sortDataByName(
         searchedPatientData,
