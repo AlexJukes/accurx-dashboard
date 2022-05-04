@@ -8,7 +8,7 @@ const DEFAULT_SORT_BY = "asc";
 
 const PatientDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
-  const [isError, setIsError] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<Error | null>(null);
   const [isSortByAsc, setIsSortByAsc] = React.useState<boolean>(true);
   const [searchInput, setSearchInput] = React.useState<string>("");
 
@@ -24,8 +24,8 @@ const PatientDashboard: React.FC = () => {
         );
         setPatientData(sortedPatientData);
         setIsLoading(false);
-      } catch (error) {
-        setIsError(true);
+      } catch (error: any) {
+        setError(error);
         setIsLoading(false);
       }
     };
@@ -60,8 +60,8 @@ const PatientDashboard: React.FC = () => {
       );
       setPatientData(sortedPatientData);
       setIsLoading(false);
-    } catch (error) {
-      setIsError(true);
+    } catch (error: any) {
+      setError(error);
       setIsLoading(false);
     }
   };
@@ -78,8 +78,8 @@ const PatientDashboard: React.FC = () => {
       />
       {isLoading ? (
         <div>Loading...</div>
-      ) : isError ? (
-        <div>Looks like something went wrong loading the data</div>
+      ) : error ? (
+        <div>{error.message}</div>
       ) : isSearching ? (
         <div>Please type more than one character to search</div>
       ) : (

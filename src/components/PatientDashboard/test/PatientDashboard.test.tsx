@@ -65,15 +65,11 @@ describe("PatientDashboard", () => {
   });
 
   it("renders an error message if there was a problem fetching the data", async () => {
-    (fetchPatientData as jest.Mock).mockRejectedValueOnce("Uh oh!");
+    (fetchPatientData as jest.Mock).mockRejectedValueOnce(new Error("Uh oh!"));
 
     render(<PatientDashboard />);
 
-    expect(
-      await screen.findByText(
-        "Looks like something went wrong loading the data"
-      )
-    ).toBeInTheDocument();
+    expect(await screen.findByText("Uh oh!")).toBeInTheDocument();
   });
 
   it("toggles sorting the data by ascending or descending when clicking 'Sort by name' button", async () => {
