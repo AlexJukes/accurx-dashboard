@@ -1,4 +1,4 @@
-import { screen, render, fireEvent, waitFor } from "@testing-library/react";
+import { screen, render, waitFor } from "@testing-library/react";
 import { SearchListPatientView } from "..";
 import { searchPatientData } from "../../../api/searchPatientData";
 import { sortDataByName } from "../../../logic/sortDataByName";

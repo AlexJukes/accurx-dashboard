@@ -1,9 +1,4 @@
-import {
-  screen,
-  render,
-  waitForElementToBeRemoved,
-  waitFor,
-} from "@testing-library/react";
+import { screen, render, waitFor } from "@testing-library/react";
 import { FullListPatientView } from "..";
 import { fetchPatientData } from "../../../api/fetchPatientData";
 import { sortDataByName } from "../../../logic/sortDataByName";
