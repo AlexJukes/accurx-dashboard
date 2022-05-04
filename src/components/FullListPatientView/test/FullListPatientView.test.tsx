@@ -1,5 +1,9 @@
-import { screen, render, fireEvent } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
+import {
+  screen,
+  render,
+  waitForElementToBeRemoved,
+  waitFor,
+} from "@testing-library/react";
 import { FullListPatientView } from "..";
 import { fetchPatientData } from "../../../api/fetchPatientData";
 import { sortDataByName } from "../../../logic/sortDataByName";
@@ -67,6 +71,8 @@ describe("FullListPatientView", () => {
   });
 
   it("sorts the data by ascending or descending depending on prop", async () => {
+    (fetchPatientData as jest.Mock).mockResolvedValue(stubPatientData);
+
     (fetchPatientData as jest.Mock).mockResolvedValueOnce(stubPatientData);
 
     // initial render
@@ -74,15 +80,20 @@ describe("FullListPatientView", () => {
 
     // new props
     (sortDataByName as jest.Mock).mockReturnValueOnce(stubPatientData);
+    (sortDataByName as jest.Mock).mockReturnValueOnce(stubPatientData);
 
     const { rerender } = render(<FullListPatientView sortBy="asc" />);
 
-    expect(sortDataByName).toHaveBeenCalledTimes(1);
-    expect(sortDataByName).toHaveBeenCalledWith(stubPatientData, "asc");
+    await waitFor(() => expect(sortDataByName).toHaveBeenCalledTimes(1));
+    await waitFor(() =>
+      expect(sortDataByName).toHaveBeenCalledWith(stubPatientData, "asc")
+    );
 
     rerender(<FullListPatientView sortBy="desc" />);
-    expect(sortDataByName).toHaveBeenCalledTimes(2);
 
-    expect(sortDataByName).toHaveBeenNthCalledWith(2, stubPatientData, "desc");
+    await waitFor(() => expect(sortDataByName).toHaveBeenCalledTimes(2));
+    await waitFor(() =>
+      expect(sortDataByName).toHaveBeenNthCalledWith(2, stubPatientData, "desc")
+    );
   });
 });

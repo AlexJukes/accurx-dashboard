@@ -1,7 +1,6 @@
-import { screen, render, fireEvent } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
+import { screen, render, fireEvent, waitFor } from "@testing-library/react";
 import { SearchListPatientView } from "..";
-import { fetchPatientData } from "../../../api/fetchPatientData";
+import { searchPatientData } from "../../../api/searchPatientData";
 import { sortDataByName } from "../../../logic/sortDataByName";
 import {
   stubPatientData,
@@ -10,7 +9,7 @@ import {
 
 import { PatientDataTable } from "../../PatientDataTable";
 
-jest.mock("../../../api/fetchPatientData");
+jest.mock("../../../api/searchPatientData");
 jest.mock("../../PatientDataTable");
 jest.mock("../../../logic/sortDataByName");
 
@@ -32,16 +31,13 @@ describe("SearchListPatientView", () => {
   });
 
   it("displays a loading screen when search initiated (>= 2 characters)", async () => {
-    render(<SearchListPatientView sortBy="desc" searchQuery="a" />);
+    render(<SearchListPatientView sortBy="desc" searchQuery="ab" />);
 
-    const input = await screen.findByLabelText(/Search/);
-
-    fireEvent.change(input, { target: { value: "ab" } });
-    expect(screen.getByText("Loading...")).toBeInTheDocument();
+    expect(await screen.findByText("Loading...")).toBeInTheDocument();
   });
 
   it("renders the PatientDataTable with correct info sorted by last name once data has been fetched", async () => {
-    (fetchPatientData as jest.Mock).mockResolvedValueOnce(stubPatientData);
+    (searchPatientData as jest.Mock).mockResolvedValueOnce(stubPatientData);
     (sortDataByName as jest.Mock).mockReturnValueOnce(
       stubPatientDataSortedByAsc
     );
@@ -66,7 +62,7 @@ describe("SearchListPatientView", () => {
   });
 
   it("renders an error message if there was a problem fetching the data", async () => {
-    (fetchPatientData as jest.Mock).mockRejectedValueOnce(new Error("Uh oh!"));
+    (searchPatientData as jest.Mock).mockRejectedValueOnce(new Error("Uh oh!"));
 
     render(<SearchListPatientView sortBy="asc" searchQuery="test" />);
 
@@ -74,24 +70,28 @@ describe("SearchListPatientView", () => {
   });
 
   it("toggles sorting the data by ascending or descending depending on prop", async () => {
-    (fetchPatientData as jest.Mock).mockResolvedValueOnce(stubPatientData);
-
     // initial render
+    (searchPatientData as jest.Mock).mockResolvedValueOnce(stubPatientData);
     (sortDataByName as jest.Mock).mockReturnValueOnce(stubPatientData);
 
     // new props
+    (searchPatientData as jest.Mock).mockResolvedValueOnce(stubPatientData);
     (sortDataByName as jest.Mock).mockReturnValueOnce(stubPatientData);
 
     const { rerender } = render(
       <SearchListPatientView sortBy="asc" searchQuery="test" />
     );
 
-    expect(sortDataByName).toHaveBeenCalledTimes(1);
-    expect(sortDataByName).toHaveBeenCalledWith(stubPatientData, "asc");
+    await waitFor(() => expect(sortDataByName).toHaveBeenCalledTimes(1));
+    await waitFor(() =>
+      expect(sortDataByName).toHaveBeenCalledWith(stubPatientData, "asc")
+    );
 
     rerender(<SearchListPatientView sortBy="desc" searchQuery="test" />);
-    expect(sortDataByName).toHaveBeenCalledTimes(2);
+    await waitFor(() => expect(sortDataByName).toHaveBeenCalledTimes(2));
 
-    expect(sortDataByName).toHaveBeenNthCalledWith(2, stubPatientData, "desc");
+    await waitFor(() =>
+      expect(sortDataByName).toHaveBeenNthCalledWith(2, stubPatientData, "desc")
+    );
   });
 });

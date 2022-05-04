@@ -25,7 +25,6 @@ const SearchListPatientView: React.FC<SearchListPatientViewProps> = ({
       try {
         setError(null);
         setIsLoading(false);
-
         if (searchQuery.length < 2) return;
         setIsLoading(true);
         const searchedPatientData = await searchPatientData(searchQuery);
