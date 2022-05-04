@@ -1,0 +1,1 @@
+export { FullListPatientView } from "./FullListPatientView";

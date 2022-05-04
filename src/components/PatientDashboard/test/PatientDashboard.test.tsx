@@ -3,21 +3,29 @@ import { act } from "react-dom/test-utils";
 import { PatientDashboard } from "..";
 import { fetchPatientData } from "../../../api/fetchPatientData";
 import { sortDataByName } from "../../../logic/sortDataByName";
-import {
-  stubPatientData,
-  stubPatientDataSortedByAsc,
-} from "../../../test/stubs/patientData.stub";
-
+import { stubPatientData } from "../../../test/stubs/patientData.stub";
 import { PatientDataTable } from "../../PatientDataTable";
+import { FullListPatientView } from "../../FullListPatientView";
+import { SearchListPatientView } from "../../SearchListPatientView";
 
 jest.mock("../../../api/fetchPatientData");
 jest.mock("../../PatientDataTable");
 jest.mock("../../../logic/sortDataByName");
+jest.mock("../../FullListPatientView");
+jest.mock("../../SearchListPatientView");
 
 describe("PatientDashboard", () => {
   beforeEach(() => {
     (PatientDataTable as jest.Mock).mockImplementation(() => (
       <div data-testid="mock-patient-data-table" />
+    ));
+
+    (FullListPatientView as jest.Mock).mockImplementation(() => (
+      <div data-testid="mock-full-list-patient-view" />
+    ));
+
+    (SearchListPatientView as jest.Mock).mockImplementation(() => (
+      <div data-testid="mock-search-list-patient-view" />
     ));
   });
 
@@ -29,99 +37,33 @@ describe("PatientDashboard", () => {
     expect(await screen.findByText("Patient Information")).toBeInTheDocument();
   });
 
-  it("shows a loading message until data has been fetched", async () => {
-    render(<PatientDashboard />);
-
-    expect(await screen.findByText("Loading...")).toBeInTheDocument();
-
-    expect(
-      screen.queryByTestId("mock-patient-data-table")
-    ).not.toBeInTheDocument();
-  });
-
-  it("renders the PatientDataTable with correct info sorted by last name once data has been fetched", async () => {
-    (fetchPatientData as jest.Mock).mockResolvedValueOnce(stubPatientData);
-    (sortDataByName as jest.Mock).mockReturnValueOnce(
-      stubPatientDataSortedByAsc
-    );
-
-    const expectedProps = {
-      patientData: stubPatientDataSortedByAsc,
-    };
-    const emptyChildComponent = {};
-
+  it("shows the FullListPatientView by default", async () => {
     render(<PatientDashboard />);
 
     expect(
-      await screen.findByTestId("mock-patient-data-table")
+      screen.getByTestId("mock-full-list-patient-view")
     ).toBeInTheDocument();
-
-    expect(sortDataByName).toHaveBeenCalledWith(stubPatientData, "asc");
-
-    expect(PatientDataTable).toHaveBeenCalledWith(
-      expectedProps,
-      emptyChildComponent
-    );
-  });
-
-  it("renders an error message if there was a problem fetching the data", async () => {
-    (fetchPatientData as jest.Mock).mockRejectedValueOnce(new Error("Uh oh!"));
-
-    render(<PatientDashboard />);
-
-    expect(await screen.findByText("Uh oh!")).toBeInTheDocument();
   });
 
   it("toggles sorting the data by ascending or descending when clicking 'Sort by name' button", async () => {
-    (fetchPatientData as jest.Mock).mockResolvedValueOnce(stubPatientData);
-
-    // initial render
-    (sortDataByName as jest.Mock).mockReturnValueOnce(stubPatientData);
-
-    //button click 1
-    (sortDataByName as jest.Mock).mockReturnValueOnce(stubPatientData);
-
-    // button click 2
-    (sortDataByName as jest.Mock).mockReturnValueOnce(stubPatientData);
-
     render(<PatientDashboard />);
 
     const button = await screen.findByText(/Sort by name/);
 
-    expect(sortDataByName).toHaveBeenCalledTimes(1);
-    expect(sortDataByName).toHaveBeenCalledWith(stubPatientData, "asc");
-
     act(() => {
       button.click();
     });
-    expect(sortDataByName).toHaveBeenCalledTimes(2);
-
-    expect(sortDataByName).toHaveBeenNthCalledWith(2, stubPatientData, "desc");
-    act(() => {
-      button.click();
-    });
-    expect(sortDataByName).toHaveBeenCalledTimes(3);
-
-    expect(sortDataByName).toHaveBeenNthCalledWith(3, stubPatientData, "asc");
+    expect(FullListPatientView).toHaveBeenCalledWith({ sortBy: "desc" }, {});
   });
 
-  it("shows a message saying you need to type more than one character to do a search", async () => {
+  it("shows the SearchListPatientView when search initiated", async () => {
     render(<PatientDashboard />);
 
     const input = await screen.findByLabelText(/Search/);
 
     fireEvent.change(input, { target: { value: "a" } });
     expect(
-      screen.getByText("Please type more than one character to search")
+      screen.getByTestId("mock-search-list-patient-view")
     ).toBeInTheDocument();
-  });
-
-  it("displays a loading screen when search initiated (>= 2 characters)", async () => {
-    render(<PatientDashboard />);
-
-    const input = await screen.findByLabelText(/Search/);
-
-    fireEvent.change(input, { target: { value: "ab" } });
-    expect(screen.getByText("Loading...")).toBeInTheDocument();
   });
 });
