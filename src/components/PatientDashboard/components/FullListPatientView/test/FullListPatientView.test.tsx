@@ -9,9 +9,9 @@ import {
 
 import { PatientDataTable } from "../../PatientDataTable";
 
-jest.mock("../../../api/fetchPatientData");
+jest.mock("../../../../../api/fetchPatientData");
 jest.mock("../../PatientDataTable");
-jest.mock("../../../logic/sortDataByName");
+jest.mock("../../../../../logic/sortDataByName");
 
 describe("FullListPatientView", () => {
   beforeEach(() => {

@@ -1,18 +1,15 @@
 import { screen, render, fireEvent } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import { PatientDashboard } from "..";
-import { fetchPatientData } from "../../../api/fetchPatientData";
-import { sortDataByName } from "../../../logic/sortDataByName";
-import { stubPatientData } from "../../../test/stubs/patientData.stub";
 import { PatientDataTable } from "../components/PatientDataTable";
 import { FullListPatientView } from "../components/FullListPatientView";
 import { SearchListPatientView } from "../components/SearchListPatientView";
 
 jest.mock("../../../api/fetchPatientData");
-jest.mock("../../PatientDataTable");
+jest.mock("../components/PatientDataTable");
 jest.mock("../../../logic/sortDataByName");
-jest.mock("../../FullListPatientView");
-jest.mock("../../SearchListPatientView");
+jest.mock("../components/FullListPatientView");
+jest.mock("../components/SearchListPatientView");
 
 describe("PatientDashboard", () => {
   beforeEach(() => {

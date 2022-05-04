@@ -9,9 +9,9 @@ import {
 
 import { PatientDataTable } from "../../PatientDataTable";
 
-jest.mock("../../../api/searchPatientData");
+jest.mock("../../../../../api/searchPatientData");
 jest.mock("../../PatientDataTable");
-jest.mock("../../../logic/sortDataByName");
+jest.mock("../../../../../logic/sortDataByName");
 
 describe("SearchListPatientView", () => {
   beforeEach(() => {
