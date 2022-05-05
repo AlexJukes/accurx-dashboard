@@ -1,5 +1,6 @@
 .search-bar {
   top: 20px;
+  padding: 10px 0;
   position: sticky;
   background-color: palegreen;
 }
